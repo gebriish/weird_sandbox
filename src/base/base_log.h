@@ -1,7 +1,6 @@
 #pragma once
 
 #include "./base_core.h"
-#include "./base_types.h"
 #include <stdio.h>
 
 enum TextColor /* for ascii logging */
@@ -16,19 +15,19 @@ enum TextColor /* for ascii logging */
 template <typename ...Args>
 force_inline void _log(const char *prefix, const char *msg, TextColor color, Args... args)
 {
-	local_persist const char* textColorTable[TEXT_COLOR_COUNT] {
+	local_persist const char* color_table[TEXT_COLOR_COUNT] {
 		"\x1b[31m", // Red
     "\x1b[37m", // White
     "\x1b[33m", // Yellow
     "\x1b[32m"  // Green	
 	};
 
-	char formatBuffer[8192] = {0};
-	sprintf(formatBuffer, "%s %s %s\033[0m", textColorTable[color], prefix, msg);
+	char format_buffer[8192] = {0};
+	sprintf(format_buffer, "%s %s %s\033[0m", color_table[color], prefix, msg);
 
-	char textBuffer[8192] = {0};
-	sprintf(textBuffer, formatBuffer, args...);
-	puts(textBuffer);
+	char text_buffer[8192] = {0};
+	sprintf(text_buffer, format_buffer, args...);
+	puts(text_buffer);
 }
 
 #define ENGINE_LOG_INFO(msg, ...)  _log("TRACE : ", msg, TEXT_COLOR_GREEN, ##__VA_ARGS__)

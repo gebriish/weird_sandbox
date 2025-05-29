@@ -2,7 +2,12 @@
 #include "base_types.h"
 #include "base_log.h"
 
-int main(i32 argc, char **argv)
+#if OS_WINDOWS && !ENGINE_DEBUG_MODE
+#include <windows.h> // Required for HINSTANCE etc.
+int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+#else
+int main(int argc, char **argv)
+#endif
 {
   const char *os_string;
   const char *compiler_string;
