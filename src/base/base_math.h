@@ -1,0 +1,214 @@
+#pragma once
+#include "./base_core.h"
+#include "./base_types.h"
+#include <math.h>
+
+//=====================================
+// Vector types
+
+union vec2 {
+  struct {
+    f32 x, y;
+  };
+  f32 v[2];
+};
+
+union ivec2 {
+  struct {
+    i32 x, y;
+  };
+  i32 v[2];
+};
+
+union vec3 {
+  struct {
+    f32 x, y, z;
+  };
+  f32 v[3];
+};
+
+union ivec3 {
+  struct {
+    i32 x, y, z;
+  };
+  i32 v[3];
+};
+
+union vec4 {
+  struct {
+    f32 x, y, z, w;
+  };
+  f32 v[4];
+};
+
+union ivec4 {
+  struct {
+    i32 x, y, z, w;
+  };
+  i32 v[4];
+};
+
+//=====================================
+// Vector functions
+
+//=================
+// vec2
+force_inline vec2 operator+(const vec2& a, const vec2& b) {
+  return vec2{a.x + b.x, a.y + b.y};
+}
+
+force_inline vec2 operator-(const vec2& a, const vec2& b) {
+  return vec2{a.x - b.x, a.y - b.y};
+}
+
+force_inline vec2 operator*(const vec2& v, f32 s) {
+  return vec2{v.x * s, v.y * s};
+}
+
+force_inline vec2 operator*(f32 s, const vec2& v) {
+  return vec2{v.x * s, v.y * s};
+}
+
+force_inline vec2 operator/(const vec2& v, f32 s) {
+  return vec2{v.x / s, v.y / s};
+}
+
+force_inline vec2& operator+=(vec2& a, const vec2& b) {
+  a.x += b.x; a.y += b.y; return a;
+}
+
+force_inline vec2& operator-=(vec2& a, const vec2& b) {
+  a.x -= b.x; a.y -= b.y; return a;
+}
+
+force_inline vec2& operator*=(vec2& a, f32 s) {
+  a.x *= s; a.y *= s; return a;
+}
+
+force_inline vec2& operator/=(vec2& a, f32 s) {
+  a.x /= s; a.y /= s; return a;
+}
+
+force_inline vec2 operator-(const vec2& v) {
+  return vec2{-v.x, -v.y};
+}
+
+force_inline f32 dot(const vec2& a, const vec2& b) {
+  return a.x * b.x + a.y * b.y;
+}
+
+force_inline f32 length_squared(const vec2& v) {
+  return v.x * v.x + v.y * v.y;
+}
+
+force_inline f32 length(const vec2& v) {
+  return sqrt(v.x * v.x + v.y * v.y);
+}
+
+//=================
+// ivec2
+force_inline ivec2 operator+(const ivec2& a, const ivec2& b) {
+  return ivec2{a.x + b.x, a.y + b.y};
+}
+
+force_inline ivec2 operator-(const ivec2& a, const ivec2& b) {
+  return ivec2{a.x - b.x, a.y - b.y};
+}
+
+force_inline ivec2& operator+=(ivec2& a, const ivec2& b) {
+  a.x += b.x; a.y += b.y; return a;
+}
+
+force_inline ivec2& operator-=(ivec2& a, const ivec2& b) {
+  a.x -= b.x; a.y -= b.y; return a;
+}
+
+force_inline ivec2 operator-(const ivec2& v) {
+  return ivec2{-v.x, -v.y};
+}
+
+force_inline bool operator==(const ivec2& a, const ivec2& b) {
+  return a.x == b.x && a.y == b.y;
+}
+
+//=================
+// vec3
+force_inline vec3 operator+(const vec3& a, const vec3& b) {
+  return vec3{a.x + b.x, a.y + b.y, a.z + b.z};
+}
+
+force_inline vec3 operator-(const vec3& a, const vec3& b) {
+  return vec3{a.x - b.x, a.y - b.y, a.z - b.z};
+}
+
+force_inline vec3 operator*(const vec3& v, f32 s) {
+  return vec3{v.x * s, v.y * s, v.z * s};
+}
+
+force_inline vec3 operator*(f32 s, const vec3& v) {
+  return vec3{v.x * s, v.y * s, v.z * s};
+}
+
+force_inline vec3 operator/(const vec3& v, f32 s) {
+  return vec3{v.x / s, v.y / s, v.z / s};
+}
+
+force_inline vec3& operator+=(vec3& a, const vec3& b) {
+  a.x += b.x; a.y += b.y; a.z += b.z; return a;
+}
+
+force_inline vec3& operator-=(vec3& a, const vec3& b) {
+  a.x -= b.x; a.y -= b.y; a.z -= b.z; return a;
+}
+
+force_inline vec3& operator*=(vec3& a, f32 s) {
+  a.x *= s; a.y *= s; a.z *= s; return a;
+}
+
+force_inline vec3& operator/=(vec3& a, f32 s) {
+  a.x /= s; a.y /= s; a.z /= s; return a;
+}
+
+force_inline vec3 operator-(const vec3& v) {
+  return vec3{-v.x, -v.y, -v.z};
+}
+
+force_inline f32 dot(const vec3& a, const vec3& b) {
+  return a.x * b.x + a.y * b.y + a.z * b.z;
+}
+
+force_inline f32 length_squared(const vec3& v) {
+  return v.x * v.x + v.y * v.y + v.z * v.z;
+}
+
+force_inline f32 length(const vec3& v) {
+  return sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+}
+
+//=================
+// ivec3
+force_inline ivec3 operator+(const ivec3& a, const ivec3& b) {
+  return ivec3{a.x + b.x, a.y + b.y, a.z + b.z};
+}
+
+force_inline ivec3 operator-(const ivec3& a, const ivec3& b) {
+  return ivec3{a.x - b.x, a.y - b.y, a.z - b.z};
+}
+
+force_inline ivec3& operator+=(ivec3& a, const ivec3& b) {
+  a.x += b.x; a.y += b.y; a.z += b.z; return a;
+}
+
+force_inline ivec3& operator-=(ivec3& a, const ivec3& b) {
+  a.x -= b.x; a.y -= b.y; a.z -= b.z; return a;
+}
+
+force_inline ivec3 operator-(const ivec3& v) {
+  return ivec3{-v.x, -v.y, -v.z};
+}
+
+force_inline bool operator==(const ivec3& a, const ivec3& b) {
+  return a.x == b.x && a.y == b.y && a.z == b.z;
+}
+
+//=====================================
