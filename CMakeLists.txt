@@ -10,7 +10,19 @@ add_subdirectory(lib/glfw)
 add_subdirectory(lib/glad)
 
 file(GLOB_RECURSE SOURCE_FILES
-	${CMAKE_SOURCE_DIR}/src/*.cpp
+  # BASE FILES
+	${CMAKE_SOURCE_DIR}/src/base/base_arena.cpp
+  
+  # ENGINE FILES
+	${CMAKE_SOURCE_DIR}/src/engine/engine_core.cpp
+	${CMAKE_SOURCE_DIR}/src/engine/engine_entry.cpp
+
+  # OS FILES
+	${CMAKE_SOURCE_DIR}/src/os/os_core.cpp
+
+  # RENDER FILES
+	${CMAKE_SOURCE_DIR}/src/render/render_core.cpp
+
 )
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
@@ -18,6 +30,7 @@ add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 target_include_directories(${PROJECT_NAME}
 	PRIVATE ${CMAKE_SOURCE_DIR}/lib/glfw/include
 	PRIVATE ${CMAKE_SOURCE_DIR}/lib/glad/include
+	PRIVATE ${CMAKE_SOURCE_DIR}/src
 )
 
 find_package(OpenGL REQUIRED)

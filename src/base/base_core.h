@@ -1,6 +1,13 @@
 #pragma once
 
 //=====================================
+// Runtime flags
+//=====================================
+#define ENGINE_DEBUG_BUILD 1
+#define ENGINE_ZERO_INITIALIZE 1
+
+
+//=====================================
 // Compiler and OS related Macros
 //=====================================
 
@@ -15,7 +22,7 @@
 # define COMPILER_CLANG 1
 #	if defined(_WIN32)
 #  define OS_WINDOWS 1
-# elif defined(__gnu_linux__)
+# elif defined(__linux__)
 #  define OS_LINUX 1
 # elif defined(__APPLE__) && defined(__MACH__)
 #  define OS_MAC 1
@@ -26,7 +33,7 @@
 # define COMPILER_GCC 1
 #	if defined(_WIN32)
 #  define OS_WINDOWS 1
-# elif defined(__gnu_linux__)
+# elif defined(__linux__)
 #  define OS_LINUX 1
 # elif defined(__APPLE__) && defined(__MACH__)
 #  define OS_MAC 1
@@ -55,7 +62,7 @@
 #endif
 
 #if COMPILER_CL
-# define force_inline __forceinline inline
+# define force_inline __forceinline
 #elif COMPILER_CLANG || COMPILER_GCC
 # define force_inline __attribute__((always_inline)) inline
 #else 
@@ -65,6 +72,3 @@
 #define internal      static
 #define global        static
 #define local_persist static
-
-/* set this to 0 in release build */
-#define ENGINE_DEBUG_MODE 1
