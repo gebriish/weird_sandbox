@@ -1,10 +1,15 @@
-#pragma once
-#include <base/base_core.h>
+#ifndef OS_INC_H
+#define OS_INC_H
 
-// ONLY TO BE INCLUDED ONCE
+#include "base/base_core.h"
+#include "os/core/os_core.h"
 
-#if OS_WINDOWS || OS_LINUX 
-#include "glfw/os_impl_glfw.cpp"
+#if OS_WINDOWS
+# include "os/core/win32/os_core_win32.h"
+#elif OS_LINUX
+# include "os/core/linux/os_core_linux.h"
+#else
+# error OS not supported
 #endif
 
-
+#endif

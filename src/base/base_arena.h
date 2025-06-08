@@ -1,5 +1,7 @@
-#pragma once
-#include "base_types.h"
+#ifndef BASE_ARENA_H
+#define BASE_ARENA_H
+
+#include "base_core.h"
 
 #define KB(SIZE) SIZE * 1024
 #define MB(SIZE) SIZE * KB(1024)
@@ -23,20 +25,21 @@ struct Arena
   size_t used;
 };
 
-struct TempAllocScope // scope controlled arena block
+struct ArenaScope // scope controlled arena block
 {
   Arena *arena;
   size_t mark;
-
-  TempAllocScope(Arena *arena);
-  ~TempAllocScope();
 };
 
-Arena arena_begin(size_t capacity);
-void arena_reset(Arena *arena);
-void arena_end(Arena *arena);
+internal Arena arena_begin(size_t capacity);
+internal void arena_reset(Arena *arena);
+internal void arena_end(Arena *arena);
 
-void *arena_alloc(Arena *arena, size_t size);
-void arena_free(Arena *arena, void *memory); // not recommended but sometimes useful
+internal ArenaScope rena_scope_begin(Arena *arena);
+internal void arena_scope_end(ArenaScope *scope);
 
-void arena_visualize(Arena *arena);
+internal void *arena_alloc(Arena *arena, size_t size);
+internal void arena_free(Arena *arena, void *memory); // not recommended but sometimes useful
+
+
+#endif

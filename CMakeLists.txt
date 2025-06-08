@@ -1,42 +1,30 @@
 cmake_minimum_required(VERSION 3.10)
-project(weird_sandbox)
+project(WeirdSandbox)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(OpenGL_GL_PREFERENCE "GLVND")
 
-add_subdirectory(lib/glfw)
-add_subdirectory(lib/glad)
+set(ENGINE_NAME "engine")
+set(GAME_NAME "sandbox")
 
-file(GLOB_RECURSE SOURCE_FILES
-  # BASE FILES
-	${CMAKE_SOURCE_DIR}/src/base/base_arena.cpp
-  
-  # ENGINE FILES
-	${CMAKE_SOURCE_DIR}/src/engine/engine_core.cpp
-	${CMAKE_SOURCE_DIR}/src/engine/engine_entry.cpp
+add_executable(${ENGINE_NAME} src/engine/engine_main.cpp)
 
-  # OS FILES
-	${CMAKE_SOURCE_DIR}/src/os/os_core.cpp
-
-  # RENDER FILES
-	${CMAKE_SOURCE_DIR}/src/render/render_core.cpp
-
+target_include_directories(${ENGINE_NAME} 
+	PRIVATE lib/glad
+	PRIVATE src
 )
 
-add_executable(${PROJECT_NAME} ${SOURCE_FILES})
+#if(WIN32)
+#	target_link_libraries(${ENGINE_NAME} PRIVATE opengl32)
+#elseif(APPLE)
+#	target_link_libraries(${ENGINE_NAME} PRIVATE OpenGL)
+#else() # Linux and other UNIX
+#	target_link_libraries(${ENGINE_NAME} PRIVATE GL)
+#endif()
 
-target_include_directories(${PROJECT_NAME}
-	PRIVATE ${CMAKE_SOURCE_DIR}/lib/glfw/include
-	PRIVATE ${CMAKE_SOURCE_DIR}/lib/glad/include
-	PRIVATE ${CMAKE_SOURCE_DIR}/src
+set_target_properties(${ENGINE_NAME} PROPERTIES
+	RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+	OUTPUT_NAME ${GAME_NAME}_app
 )
-
-find_package(OpenGL REQUIRED)
-
-if (WIN32)
-	target_link_libraries(${PROJECT_NAME} PRIVATE glfw opengl32 glad)
-else()
-	target_link_libraries(${PROJECT_NAME} PRIVATE glfw GL glad)
-endif ()

@@ -1,6 +1,7 @@
-#pragma once
-#include "./base_core.h"
-#include "./base_types.h"
+#ifndef BASE_MATH_H
+#define BASE_MATH_H
+
+#include "base_core.h"
 #include <math.h>
 
 //=====================================
@@ -8,6 +9,7 @@
 
 //=================
 // vec2
+
 force_inline vec2 operator+(const vec2& a, const vec2& b) {
   return vec2{a.x + b.x, a.y + b.y};
 }
@@ -166,4 +168,6 @@ force_inline bool operator==(const ivec3& a, const ivec3& b) {
   return a.x == b.x && a.y == b.y && a.z == b.z;
 }
 
-//=====================================
+//=====================================A
+
+#endif
