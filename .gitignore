@@ -1,3 +1,4 @@
-lib/glfw
-build
 .cache/
+build/
+bin/
+lib/glfw

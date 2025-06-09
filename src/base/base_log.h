@@ -2,6 +2,7 @@
 #define BASE_LOG_H
 
 #if ENGINE_DEBUG_MODE
+
 #include <stdio.h>
 #include "base_core.h"
 
@@ -14,11 +15,11 @@
 #define COLOR_CYAN    "\x1b[36m"
 #define COLOR_WHITE   "\x1b[37m"
 
-#define LOG_INFO(fmt, ...)   fprintf(stderr, COLOR_CYAN    "[INFO]  : " fmt COLOR_RESET "\n", ##__VA_ARGS__)
-#define LOG_WARN(fmt, ...)   fprintf(stderr, COLOR_YELLOW  "[WARN]  : " fmt COLOR_RESET "\n", ##__VA_ARGS__)
-#define LOG_ERRO(fmt, ...)   fprintf(stderr, COLOR_RED     "[ERROR] : " fmt COLOR_RESET "\n", ##__VA_ARGS__)
-#define LOG_DEBG(fmt, ...)   fprintf(stderr, COLOR_MAGENTA "[DEBUG] : " fmt COLOR_RESET "\n", ##__VA_ARGS__)
-#define LOG_SUCC(fmt, ...)   fprintf(stderr, COLOR_GREEN   "[OK]    : " fmt COLOR_RESET "\n", ##__VA_ARGS__)
+#define log_info(fmt, ...)   fprintf(stderr, COLOR_CYAN    "[INFO]  : " fmt COLOR_RESET "\n", ##__VA_ARGS__)
+#define log_warn(fmt, ...)   fprintf(stderr, COLOR_YELLOW  "[WARN]  : " fmt COLOR_RESET "\n", ##__VA_ARGS__)
+#define log_erro(fmt, ...)   fprintf(stderr, COLOR_RED     "[ERROR] : " fmt COLOR_RESET "\n", ##__VA_ARGS__)
+#define log_debg(fmt, ...)   fprintf(stderr, COLOR_MAGENTA "[DEBUG] : " fmt COLOR_RESET "\n", ##__VA_ARGS__)
+#define log_succ(fmt, ...)   fprintf(stderr, COLOR_GREEN   "[OK]    : " fmt COLOR_RESET "\n", ##__VA_ARGS__)
 
 #define ASSERT_MSG(expr, msg, ...) do {                                                                    \
 	if (!(expr)) {                                                                                           \
@@ -31,13 +32,14 @@
 
 #else
 
-#define LOG_INFO(fmt, ...) ((void)0)
-#define LOG_WARN(fmt, ...) ((void)0)
-#define LOG_ERRO(fmt, ...) ((void)0)
-#define LOG_DEBG(fmt, ...) ((void)0)
-#define LOG_SUCC(fmt, ...) ((void)0)
+#define log_info(fmt, ...)         ((void)0)
+#define log_warn(fmt, ...)         ((void)0)
+#define log_erro(fmt, ...)         ((void)0)
+#define log_debg(fmt, ...)         ((void)0)
+#define log_succ(fmt, ...)         ((void)0)
+
+#define ASSERT(expr)               ((void)0)
 #define ASSERT_MSG(expr, msg, ...) ((void)0)
-#define ASSERT(expr) ((void)0)
 
 #endif
 

@@ -3,7 +3,6 @@
 
 //=====================================
 // Compiler and OS related Macros
-
 #if defined(_MSC_VER)
 # define COMPILER_CL 1
 #	if defined(_WIN32)
@@ -62,9 +61,33 @@
 # define force_inline inline
 #endif
 
+#if defined(_MSC_VER)
+ #include <intrin.h>
+ #define DEBUG_BREAK() __debugbreak()
+#elif defined(__GNUC__) || defined(__clang__)
+ #if defined(__i386__) || defined(__x86_64__)
+  #define DEBUG_BREAK() __asm__ volatile("int3")
+ #else
+  #include <signal.h>
+  #define DEBUG_BREAK() raise(SIGTRAP)
+ #endif
+#else
+ #define DEBUG_BREAK() ((void)0)
+#endif
+
 #define internal      static
 #define global        static
 #define local_persist static
+
+#if OS_WINDOWS
+# define EXPORT_FN __declspec(dllexport)
+#elif OS_LINUX
+# define EXPORT_FN __attribute__((visibility("default")))
+#else
+# error OS not supported
+#endif
+
+#define UNUSED_VAR(x) ((void)x)
 
 
 //=====================================
@@ -129,19 +152,5 @@ union ivec4 {
   };
   i32 v[4];
 };
-
-#if defined(_MSC_VER)
- #include <intrin.h>
- #define DEBUG_BREAK() __debugbreak()
-#elif defined(__GNUC__) || defined(__clang__)
- #if defined(__i386__) || defined(__x86_64__)
-  #define DEBUG_BREAK() __asm__ volatile("int3")
- #else
-  #include <signal.h>
-  #define DEBUG_BREAK() raise(SIGTRAP)
- #endif
-#else
- #define DEBUG_BREAK() ((void)0)
-#endif
 
 #endif

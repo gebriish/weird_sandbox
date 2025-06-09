@@ -35,7 +35,7 @@ internal Arena arena_begin(size_t capacity);
 internal void arena_reset(Arena *arena);
 internal void arena_end(Arena *arena);
 
-internal ArenaScope rena_scope_begin(Arena *arena);
+internal ArenaScope arena_scope_begin(Arena *arena);
 internal void arena_scope_end(ArenaScope *scope);
 
 internal void *arena_alloc(Arena *arena, size_t size);
