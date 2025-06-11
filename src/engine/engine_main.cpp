@@ -10,7 +10,7 @@
 #include "base/base_inc.cpp"
 #include "os/os_inc.cpp"
 
-typedef GameAPI (*GetGameAPIFunc)();
+typedef GameProc (*GetGameAPIFunc)();
 
 internal void engine_unload_game(GameLib *lib)
 {
@@ -18,7 +18,7 @@ internal void engine_unload_game(GameLib *lib)
 		os_close_dl(lib->handle);
 		lib->handle = nullptr;
 	}
-	memset(&lib->api, 0, sizeof(GameAPI));
+	memset(&lib->api, 0, sizeof(GameProc));
 }
 
 internal bool engine_load_game(GameLib *lib, const char* path)
@@ -30,49 +30,70 @@ internal bool engine_load_game(GameLib *lib, const char* path)
 		return false;
 	}
 
-	const char *GAME_API_FN_SYM = "get_game_api";
-	GetGameAPIFunc get_game_api = (GetGameAPIFunc)os_dl_symbol(lib->handle, GAME_API_FN_SYM);
-	if (!get_game_api) {
+	const char *GAME_API_FN_SYM = "get_game_proc";
+	GetGameAPIFunc get_game_proc = (GetGameAPIFunc)os_dl_symbol(lib->handle, GAME_API_FN_SYM);
+	if (!get_game_proc) {
 		log_erro("'%s' symbol not found in game dl", GAME_API_FN_SYM);
 		os_close_dl(lib->handle);
 		lib->handle = nullptr;
 		return false;
 	}
 
-	lib->api = get_game_api();
+	lib->api = get_game_proc();
 	return true;
 }
 
 
 constexpr const char *LIB_PATH =
 #if OS_WINDOWS
-	"./sandbox.dll";
+	"./Sandbox.dll";
 #elif OS_LINUX 
-	"./libsandbox.so";
+	"./libSandbox.so";
 #else
 # error OS not supported
 #endif
+
+//========================
+// game entry point
 
 internal i32 engine_main(i32 argc, char **argv)
 {
 	GameLib game_lib = {};
 	if (!engine_load_game(&game_lib, LIB_PATH)) return 1;
 
+	//==== init engine state ====
+	EngineState engine_state = {};
+	engine_state.time_scale = 1.0f;
+	//===========================
+
 	Arena persist_mem = arena_begin(MB(50));
 	Arena transient_mem = arena_begin(MB(50));
 
-	GameMemory *mem = game_lib.api.alloc_mem(&persist_mem);
+	GameMemory *mem = game_lib.api.alloc_state(&persist_mem);
 	game_lib.api.init(mem);
 
-	while(true)
+	OS_WindowConfig config = {
+		.width = 1280,
+		.height = 800,
+		.title = "Sandbox",
+		.widow_flags = OS_WindowFlag_Decorated | OS_WindowFlag_Resizable
+	};
+
+	if(!os_window_open(config)) return 1;
+
+	f64 last_frame_time = os_get_seconds();
+	while(os_is_window_open())
 	{
+		f64 current_time = os_get_seconds();
+		f64 delta_time = current_time - last_frame_time;
+		last_frame_time = current_time;
+
 #if ENGINE_DEBUG_MODE
 		u64 new_time = os_file_write_time(LIB_PATH);
 		if (new_time != game_lib.last_write_time) {
 			log_warn("hot reloading game library");
 			engine_unload_game(&game_lib);
 			os_sleep_ms(100);
-
 			if(!engine_load_game(&game_lib, LIB_PATH)) {
 				log_erro("Hot reload failed, keeping previous version");
 				continue;
@@ -80,8 +101,10 @@ internal i32 engine_main(i32 argc, char **argv)
 		}
 #endif
 
-		game_lib.api.update(mem, 0.0f);
-		os_sleep_ms(1000);
+		game_lib.api.update(mem, (f32) delta_time);
+
+		os_window_update();
+		arena_reset(&transient_mem);
 	}
 
 	engine_unload_game(&game_lib);

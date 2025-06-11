@@ -6,20 +6,28 @@
 #include "os/core/os_core.h"
 #include <time.h>
 
-struct GameMemory;
 
-struct GameAPI
+struct EngineState 
+{
+	f32 time_scale;
+};
+
+struct GameMemory
+{
+};
+
+struct GameProc
 {
 	void (*init)(GameMemory *mem);
 	void (*update)(GameMemory *mem, f32 dt);
-	GameMemory* (*alloc_mem)(Arena *arena);
+	GameMemory* (*alloc_state)(Arena *arena);
 };
 
 struct GameLib
 {
 	OS_LibHandle handle;
 	time_t last_write_time;
-	GameAPI api;
+	GameProc api;
 };
 
 #endif

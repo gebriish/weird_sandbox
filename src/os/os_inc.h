@@ -12,4 +12,6 @@
 # error OS not supported
 #endif
 
+#include "os/gfx/os_gfx.h"
+
 #endif

@@ -7,33 +7,24 @@
 //[cpp]
 #include "base/base_inc.cpp"
 
-struct GameMemory
-{
-	i32 counter;
-};
-
 EXPORT_FN void game_init(GameMemory *mem)
 {
-	mem->counter = 0;
 }
 
 EXPORT_FN void game_update(GameMemory *mem, f32 dt)
 {
-	mem->counter += 1;
-	log_info("different message %d", mem->counter);
 }
 
-EXPORT_FN GameMemory *game_alloc(Arena *arena)
+EXPORT_FN GameMemory* game_alloc_state(Arena *arena)
 {
 	return (GameMemory*) arena_alloc(arena, sizeof(GameMemory));
 }
 
-extern "C" EXPORT_FN GameAPI get_game_api()
+extern "C" EXPORT_FN GameProc get_game_proc()
 {
-	const GameAPI api = {
+	return (GameProc) {
 		.init = game_init,
 		.update = game_update,
-		.alloc_mem = game_alloc,
+		.alloc_state = game_alloc_state
 	};
-	return api;
 }

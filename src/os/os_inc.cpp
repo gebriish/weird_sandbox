@@ -9,4 +9,8 @@
 # error OS not supported
 #endif
 
+#if OS_WINDOWS || OS_LINUX 
+# include "os/gfx/glfw/os_gfx_glfw.cpp"
+#endif
+
 
